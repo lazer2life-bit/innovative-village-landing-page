@@ -31,8 +31,12 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2">
               {[
                 { label: "Features", href: "#features" },
+                { label: "Budget Management", href: "#budgets" },
+                { label: "Expense Tracking", href: "#expenses" },
+                { label: "Use Cases", href: "#use-cases" },
                 { label: "How It Works", href: "#how-it-works" },
                 { label: "AI Insights", href: "#ai" },
+                { label: "Technology", href: "#tech" },
                 { label: "Team", href: "#team" },
               ].map((link) => (
                 <li key={link.label}>
