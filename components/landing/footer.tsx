@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Mail, Globe } from "lucide-react";
 
 export function Footer() {
@@ -7,12 +8,14 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <span className="text-lg font-bold text-primary-foreground">
-                  G
-                </span>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/grambudget-logo.jpg"
+                alt="GramBudget Logo"
+                width={36}
+                height={36}
+                className="rounded-lg"
+              />
               <span className="font-display text-xl font-bold text-foreground">
                 GramBudget
               </span>
@@ -35,14 +38,13 @@ export function Footer() {
                 { label: "Expense Tracking", href: "#expenses" },
                 { label: "Use Cases", href: "#use-cases" },
                 { label: "How It Works", href: "#how-it-works" },
-                { label: "AI Insights", href: "#ai" },
                 { label: "Technology", href: "#tech" },
                 { label: "Team", href: "#team" },
               ].map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
                     {link.label}
                   </a>
@@ -60,7 +62,7 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:grambudget@gmail.com"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   <Mail className="h-4 w-4" />
                   grambudget@gmail.com
@@ -71,7 +73,7 @@ export function Footer() {
                   href="https://www.grambudget.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   <Globe className="h-4 w-4" />
                   www.grambudget.com
@@ -81,7 +83,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
             {"© 2026 GramBudget. Built with care by LJ University students."}

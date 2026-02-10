@@ -8,7 +8,6 @@ import { ExpenseTracker } from "@/components/landing/expense-tracker";
 import { Stats } from "@/components/landing/stats";
 import { UseCases } from "@/components/landing/use-cases";
 import { HowItWorks } from "@/components/landing/how-it-works";
-import { AISection } from "@/components/landing/ai-section";
 import { TechStack } from "@/components/landing/tech-stack";
 import { Team } from "@/components/landing/team";
 import { CTA } from "@/components/landing/cta";
@@ -27,7 +26,6 @@ export default function Home() {
       <Stats />
       <UseCases />
       <HowItWorks />
-      <AISection />
       <TechStack />
       <Team />
       <CTA />

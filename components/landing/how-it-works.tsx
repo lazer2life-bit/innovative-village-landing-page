@@ -20,7 +20,7 @@ const steps = [
     step: "03",
     title: "Monitor & Analyze",
     description:
-      "View real-time dashboards, track fund utilization, and get AI-powered insights on spending patterns.",
+      "View real-time dashboards, track fund utilization, and get insights on spending patterns across departments.",
   },
   {
     icon: <Download className="h-6 w-6" />,
@@ -35,7 +35,6 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="py-20 lg:py-28 bg-card">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* Section header */}
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-primary">
             Simple Process
@@ -49,9 +48,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps */}
         <div className="relative mt-16">
-          {/* Connecting line (desktop) */}
           <div className="absolute top-16 left-0 hidden h-0.5 w-full bg-border lg:block" />
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -60,16 +57,12 @@ export function HowItWorks() {
                 key={step.step}
                 className="relative flex flex-col items-center text-center"
               >
-                {/* Step circle */}
                 <div className="relative z-10 mb-6 flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary bg-background text-primary shadow-md">
                   {step.icon}
                 </div>
-
-                {/* Step number */}
                 <span className="mb-2 font-display text-sm font-bold text-primary">
                   Step {step.step}
                 </span>
-
                 <h3 className="font-display text-lg font-bold text-foreground">
                   {step.title}
                 </h3>

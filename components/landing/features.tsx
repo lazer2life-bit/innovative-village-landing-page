@@ -71,7 +71,7 @@ const features = [
     icon: <SearchCheck className="h-6 w-6" />,
     title: "Receipt & Invoice Scanning",
     description:
-      "Upload photos of receipts and invoices. Our system extracts amount, vendor, and date automatically, reducing manual entry errors.",
+      "Upload photos of receipts and invoices. The system extracts amount, vendor, and date automatically, reducing manual entry errors.",
     category: "expense",
   },
   {
@@ -171,7 +171,6 @@ export function Features() {
   return (
     <section id="features" className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* Section header */}
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-primary">
             Comprehensive Platform
@@ -185,7 +184,6 @@ export function Features() {
           </p>
         </div>
 
-        {/* Category Tabs */}
         <div className="mt-12 flex flex-wrap justify-center gap-2">
           {categories.map((cat) => (
             <button
@@ -203,7 +201,6 @@ export function Features() {
           ))}
         </div>
 
-        {/* Feature grid */}
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((feature) => (
             <div

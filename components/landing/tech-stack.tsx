@@ -2,9 +2,9 @@ import {
   Code2,
   Server,
   Database,
-  Brain,
   Palette,
   Shield,
+  Smartphone,
 } from "lucide-react";
 
 const stack = [
@@ -37,26 +37,25 @@ const stack = [
     tags: ["PostgreSQL", "Encrypted", "Backups"],
   },
   {
-    icon: <Brain className="h-6 w-6" />,
-    title: "AI/ML Engine",
-    description:
-      "Machine learning models for spending predictions, anomaly detection, and automated financial summaries powered by scikit-learn and TensorFlow.",
-    tags: ["scikit-learn", "TensorFlow", "NLP"],
-  },
-  {
     icon: <Shield className="h-6 w-6" />,
     title: "Security Layer",
     description:
       "End-to-end encryption, JWT authentication, role-based access control, and OWASP-compliant security practices protecting all financial data.",
     tags: ["JWT Auth", "RBAC", "HTTPS"],
   },
+  {
+    icon: <Smartphone className="h-6 w-6" />,
+    title: "Mobile Responsive",
+    description:
+      "Fully optimized for smartphones and tablets. Progressive Web App capabilities allow offline access and native-like experience on any device.",
+    tags: ["PWA", "Offline", "Cross-Platform"],
+  },
 ];
 
 export function TechStack() {
   return (
-    <section className="py-20 lg:py-28">
+    <section id="tech" className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* Section header */}
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-primary">
             Technology
@@ -65,12 +64,11 @@ export function TechStack() {
             Built With Modern Tech Stack
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            React.js frontend paired with a Python backend, AI/ML engine, and
-            enterprise-grade security for a reliable and scalable platform.
+            React.js frontend paired with a Python backend and enterprise-grade
+            security for a reliable and scalable platform.
           </p>
         </div>
 
-        {/* Tech Grid */}
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {stack.map((item) => (
             <div

@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "GramBudget - Smart Village Budget & Expense Management",
   description:
-    "Improving transparency and accountability in village finances. Digital budget tracking, expense logging, and AI-powered insights for Gram Panchayats.",
+    "Improving transparency and accountability in village finances. Digital budget tracking, expense logging, and insightful reports for Gram Panchayats.",
   keywords: [
     "GramBudget",
     "village finance",

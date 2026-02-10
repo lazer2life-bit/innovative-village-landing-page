@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -9,33 +10,48 @@ const navLinks = [
   { label: "Budgets", href: "#budgets" },
   { label: "Expenses", href: "#expenses" },
   { label: "Use Cases", href: "#use-cases" },
-  { label: "AI Insights", href: "#ai" },
   { label: "Team", href: "#team" },
   { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-card/95 backdrop-blur-xl border-b border-border shadow-sm"
+          : "bg-transparent"
+      }`}
+    >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
-        <a href="#" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">G</span>
-          </div>
+        <a href="#" className="flex items-center gap-2.5">
+          <Image
+            src="/grambudget-logo.jpg"
+            alt="GramBudget Logo"
+            width={36}
+            height={36}
+            className="rounded-lg"
+          />
           <span className="font-display text-xl font-bold text-foreground">
             GramBudget
           </span>
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               {link.label}
             </a>
@@ -43,12 +59,11 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex">
-          <Button asChild>
+          <Button asChild size="sm" className="rounded-full px-6">
             <a href="#contact">Get Started</a>
           </Button>
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button
           type="button"
           className="md:hidden text-foreground"
@@ -59,21 +74,20 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Nav */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background px-4 pb-4 md:hidden">
-          <div className="flex flex-col gap-3 pt-3">
+        <div className="border-t border-border bg-card px-4 pb-4 md:hidden">
+          <div className="flex flex-col gap-1 pt-3">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </a>
             ))}
-            <Button asChild className="mt-2">
+            <Button asChild className="mt-3 rounded-full">
               <a href="#contact" onClick={() => setMobileOpen(false)}>
                 Get Started
               </a>
