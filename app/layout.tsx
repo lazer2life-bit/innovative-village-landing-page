@@ -1,4 +1,5 @@
 import React from "react"
+import { Chatbot } from "@/components/chatbot";
 import "./globals.css";
 
 export const metadata = {
@@ -35,7 +36,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}
+        <Chatbot />
+      </body>
     </html>
   );
 }
