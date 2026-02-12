@@ -3,13 +3,58 @@
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Mail, Lock, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    const supabase = createClient();
+
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo:
+            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
+            `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccess(
+          "Check your email for a confirmation link! Once confirmed, you can sign in."
+        );
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setError(error.message);
+      } else {
+        window.location.href = "/dashboard";
+      }
+    }
+    setLoading(false);
+  };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
+    setGoogleLoading(true);
     setError(null);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
@@ -19,8 +64,10 @@ export default function LoginPage() {
       },
     });
     if (error) {
-      setError(error.message);
-      setLoading(false);
+      setError(
+        "Google sign-in is not configured yet. Please use email/password, or ask the admin to enable Google OAuth in Supabase."
+      );
+      setGoogleLoading(false);
     }
   };
 
@@ -42,9 +89,13 @@ export default function LoginPage() {
           </a>
 
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              {isSignUp ? "Create your account" : "Welcome back"}
+            </h1>
             <p className="mt-1.5 text-sm text-muted-foreground">
-              Sign in to access your village budget dashboard
+              {isSignUp
+                ? "Sign up to start managing your village budget"
+                : "Sign in to access your village budget dashboard"}
             </p>
           </div>
 
@@ -54,11 +105,65 @@ export default function LoginPage() {
             </div>
           )}
 
+          {success && (
+            <div className="w-full rounded-lg bg-primary/10 px-4 py-3 text-sm text-primary">
+              {success}
+            </div>
+          )}
+
+          {/* Email / Password Form */}
+          <form onSubmit={handleEmailLogin} className="flex w-full flex-col gap-4">
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="pl-10 py-5 rounded-xl"
+              />
+            </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="password"
+                placeholder="Password (min 6 characters)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="pl-10 py-5 rounded-xl"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl py-5 text-base font-semibold"
+            >
+              {loading
+                ? isSignUp
+                  ? "Creating account..."
+                  : "Signing in..."
+                : isSignUp
+                  ? "Create Account"
+                  : "Sign In"}
+            </Button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex w-full items-center gap-4">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">OR</span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          {/* Google OAuth */}
           <Button
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={googleLoading}
             variant="outline"
-            className="flex w-full items-center justify-center gap-3 rounded-xl border-border bg-card py-6 text-base font-medium text-foreground shadow-sm transition-all hover:bg-secondary hover:shadow-md"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border-border bg-card py-5 text-base font-medium text-foreground shadow-sm transition-all hover:bg-secondary hover:shadow-md"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -78,17 +183,28 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            {loading ? "Signing in..." : "Continue with Google"}
+            {googleLoading ? "Redirecting..." : "Continue with Google"}
           </Button>
 
-          <p className="text-center text-xs text-muted-foreground">
-            By signing in, you agree to our Terms of Service and Privacy Policy.
-          </p>
+          {/* Toggle sign-in / sign-up */}
+          <button
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setError(null);
+              setSuccess(null);
+            }}
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {isSignUp
+              ? "Already have an account? Sign in"
+              : "Don't have an account? Sign up"}
+          </button>
 
           <a
             href="/"
-            className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
+            className="flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
           >
+            <ArrowLeft className="h-3.5 w-3.5" />
             Back to home
           </a>
         </div>
