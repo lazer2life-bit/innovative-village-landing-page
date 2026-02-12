@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -11,17 +12,32 @@ const navLinks = [
   { label: "Expenses", href: "#expenses" },
   { label: "Use Cases", href: "#use-cases" },
   { label: "Team", href: "#team" },
+  { label: "News", href: "#news" },
   { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
@@ -33,8 +49,8 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
-        <a href="#" className="flex items-center gap-2.5">
-          <Image
+        <a href="/" className="flex items-center gap-2.5">
+          <img
             src="/grambudget-logo.jpg"
             alt="GramBudget Logo"
             width={36}
@@ -58,10 +74,22 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:flex">
-          <Button asChild size="sm" className="rounded-full px-6">
-            <a href="#contact">Get Started</a>
-          </Button>
+        <div className="hidden items-center gap-3 md:flex">
+          {user ? (
+            <Button asChild size="sm" className="rounded-full px-6">
+              <a href="/dashboard">
+                <LayoutDashboard className="mr-1.5 h-4 w-4" />
+                Dashboard
+              </a>
+            </Button>
+          ) : (
+            <Button asChild size="sm" className="rounded-full px-6">
+              <a href="/auth/login">
+                <LogIn className="mr-1.5 h-4 w-4" />
+                Sign In
+              </a>
+            </Button>
+          )}
         </div>
 
         <button
@@ -70,7 +98,11 @@ export function Navbar() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {mobileOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       </nav>
 
@@ -87,11 +119,21 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
-            <Button asChild className="mt-3 rounded-full">
-              <a href="#contact" onClick={() => setMobileOpen(false)}>
-                Get Started
-              </a>
-            </Button>
+            {user ? (
+              <Button asChild className="mt-3 rounded-full">
+                <a href="/dashboard" onClick={() => setMobileOpen(false)}>
+                  <LayoutDashboard className="mr-1.5 h-4 w-4" />
+                  Dashboard
+                </a>
+              </Button>
+            ) : (
+              <Button asChild className="mt-3 rounded-full">
+                <a href="/auth/login" onClick={() => setMobileOpen(false)}>
+                  <LogIn className="mr-1.5 h-4 w-4" />
+                  Sign In
+                </a>
+              </Button>
+            )}
           </div>
         </div>
       )}

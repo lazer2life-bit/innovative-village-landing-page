@@ -25,8 +25,8 @@ export function CTA() {
                 asChild
                 className="gap-2 text-base px-8"
               >
-                <a href="https://www.grambudget.com" target="_blank" rel="noopener noreferrer">
-                  Visit grambudget.com
+                <a href="/auth/login">
+                  Get Started Free
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>

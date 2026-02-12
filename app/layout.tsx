@@ -1,20 +1,7 @@
 import React from "react"
-import type { Metadata, Viewport } from "next";
-import { Inter, DM_Sans } from "next/font/google";
-
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "GramBudget - Smart Village Budget & Expense Management",
   description:
     "Improving transparency and accountability in village finances. Digital budget tracking, expense logging, and insightful reports for Gram Panchayats.",
@@ -27,7 +14,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export const viewport: Viewport = {
+export const viewport = {
   themeColor: "#2d8a5e",
   width: "device-width",
   initialScale: 1,
@@ -39,7 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSans.variable}`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
