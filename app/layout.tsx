@@ -1,5 +1,6 @@
 import React from "react"
 import { Chatbot } from "@/components/chatbot";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import "./globals.css";
 
 export const metadata = {
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <Chatbot />
+        <SpeedInsights />
       </body>
     </html>
   );
