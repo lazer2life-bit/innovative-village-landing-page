@@ -10,6 +10,7 @@ import { UseCases } from "@/components/landing/use-cases";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { TechStack } from "@/components/landing/tech-stack";
 import { Team } from "@/components/landing/team";
+import { LiveNewsSection } from "@/components/landing/live-news-section";
 import { CTA } from "@/components/landing/cta";
 import { Footer } from "@/components/landing/footer";
 
@@ -28,6 +29,7 @@ export default function Home() {
       <HowItWorks />
       <TechStack />
       <Team />
+      <LiveNewsSection />
       <CTA />
       <Footer />
     </main>
