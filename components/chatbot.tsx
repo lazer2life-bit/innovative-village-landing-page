@@ -3,14 +3,14 @@
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { MessageSquare, X, Send, Bot, User } from "lucide-react";
+import { MessageSquare, X, Send, Bot, User, AlertTriangle } from "lucide-react";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
 
@@ -20,7 +20,7 @@ export function Chatbot() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, error]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,17 +29,20 @@ export function Chatbot() {
     setInput("");
   };
 
-  function getMessageText(
-    msg: (typeof messages)[0]
-  ): string {
+  function getMessageText(msg: (typeof messages)[0]): string {
     if (!msg.parts || !Array.isArray(msg.parts)) return "";
     return msg.parts
-      .filter(
-        (p): p is { type: "text"; text: string } => p.type === "text"
-      )
+      .filter((p): p is { type: "text"; text: string } => p.type === "text")
       .map((p) => p.text)
       .join("");
   }
+
+  const isGatewayError =
+    error?.message?.includes("credit card") ||
+    error?.message?.includes("credit_card") ||
+    error?.message?.includes("402") ||
+    error?.message?.includes("403") ||
+    error?.message?.includes("Gateway");
 
   return (
     <>
@@ -75,11 +78,8 @@ export function Chatbot() {
           </div>
 
           {/* Messages */}
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto px-4 py-4"
-          >
-            {messages.length === 0 && (
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
+            {messages.length === 0 && !error && (
               <div className="flex h-full flex-col items-center justify-center text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
                   <Bot className="h-7 w-7 text-primary" />
@@ -153,6 +153,7 @@ export function Chatbot() {
               );
             })}
 
+            {/* Loading indicator */}
             {isLoading &&
               messages.length > 0 &&
               messages[messages.length - 1]?.role === "user" && (
@@ -169,6 +170,39 @@ export function Chatbot() {
                   </div>
                 </div>
               )}
+
+            {/* Error message */}
+            {error && (
+              <div className="mb-3 flex gap-2.5">
+                <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                </div>
+                <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-destructive/10 px-4 py-3 text-sm leading-relaxed text-destructive">
+                  {isGatewayError ? (
+                    <>
+                      <p className="font-medium">AI Setup Required</p>
+                      <p className="mt-1 text-xs">
+                        The AI chatbot requires a credit card on the Vercel account to
+                        unlock free credits. Go to{" "}
+                        <a
+                          href="https://vercel.com/dashboard"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-medium"
+                        >
+                          Vercel Dashboard
+                        </a>{" "}
+                        {">"} AI {">"} Add credit card.
+                      </p>
+                    </>
+                  ) : (
+                    <p>
+                      Something went wrong. Please try again later.
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Input area */}
@@ -184,8 +218,7 @@ export function Chatbot() {
               className="flex-1 rounded-xl border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
             />
             <button
-              type="submit"
-              disabled={!input.trim() || isLoading}
+              type="submit"              disabled={!input.trim() || isLoading}
               className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
               aria-label="Send message"
             >

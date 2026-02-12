@@ -21,17 +21,40 @@ If someone asks a question that is NOT related to village finances, Gram Panchay
 Keep responses concise, helpful, and friendly. Use Indian Rupee (INR) when discussing money. You may use simple formatting like bullet points for clarity.`;
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  try {
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-  const result = streamText({
-    model: "openai/gpt-4o-mini",
-    system: SYSTEM_PROMPT,
-    messages: await convertToModelMessages(messages),
-    abortSignal: req.signal,
-  });
+    const result = streamText({
+      model: "openai/gpt-4o-mini",
+      system: SYSTEM_PROMPT,
+      messages: await convertToModelMessages(messages),
+      abortSignal: req.signal,
+    });
 
-  return result.toUIMessageStreamResponse({
-    originalMessages: messages,
-    consumeSseStream: consumeStream,
-  });
+    return result.toUIMessageStreamResponse({
+      originalMessages: messages,
+      consumeSseStream: consumeStream,
+    });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "An unexpected error occurred";
+
+    if (
+      message.includes("credit card") ||
+      message.includes("customer_verification")
+    ) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "AI Gateway requires a credit card on your Vercel account. Visit your Vercel dashboard > AI to add one and unlock free credits.",
+        }),
+        { status: 402, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ error: message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 }
