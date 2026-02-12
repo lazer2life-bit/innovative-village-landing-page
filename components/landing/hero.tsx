@@ -1,5 +1,4 @@
 import React from "react"
-import Image from "next/image";
 import { ArrowRight, BarChart3, Shield, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -59,13 +58,12 @@ export function Hero() {
                   grambudget.com/dashboard
                 </span>
               </div>
-              <Image
+              <img
                 src="/hero-dashboard.jpg"
                 alt="GramBudget Dashboard showing village financial management interface with charts and expense tracking"
                 width={1200}
                 height={675}
                 className="w-full"
-                priority
               />
             </div>
           </div>

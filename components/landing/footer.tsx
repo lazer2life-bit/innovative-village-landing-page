@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Mail, Globe } from "lucide-react";
 
 export function Footer() {
@@ -9,7 +8,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5">
-              <Image
+              <img
                 src="/grambudget-logo.jpg"
                 alt="GramBudget Logo"
                 width={36}

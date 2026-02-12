@@ -1,7 +1,4 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -34,7 +31,7 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
         <a href="#" className="flex items-center gap-2.5">
-          <Image
+          <img
             src="/grambudget-logo.jpg"
             alt="GramBudget Logo"
             width={36}
