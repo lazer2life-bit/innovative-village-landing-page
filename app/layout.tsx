@@ -1,4 +1,5 @@
 import React from "react"
+import { Analytics } from '@vercel/analytics/next';
 import { Chatbot } from "@/components/chatbot";
 import "./globals.css";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <Chatbot />
+        <Analytics />
       </body>
     </html>
   );
